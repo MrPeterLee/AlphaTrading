@@ -9,7 +9,7 @@ def price_reader(price_path):
     price_df.date = pd.to_datetime(price_df.date,format="%Y-%m-%d",errors='ignore')
     # price_df.date = price_df.date.apply(timezone.localize)
     price_df.set_index(['date'],drop=True,inplace=True)
-    price_df = price_df.sortlevel(axis=1)
+    price_df = price_df.sort_index(axis=1)
     return price_df
 
 def instrument_reader(instrument_path):
@@ -23,7 +23,7 @@ def equity_reader(equity_path):
     cn_df = pd.read_csv(equity_path)
     cn_df.date = pd.to_datetime(cn_df.date,format="%Y-%m-%d",errors='ignore')
     cn_df.set_index(['date','order_book_id'],drop=True,inplace=True)
-    cn_df.drop(["Unnamed: 0"],axis=1,inplace=True)
+    if "Unnamed: 0" in cn_df: cn_df.drop(["Unnamed: 0"],axis=1,inplace=True)
     return cn_df
 
 def benchmark_reader(benchmark_path):
@@ -35,7 +35,8 @@ def benchmark_reader(benchmark_path):
 def equity_add_instrumentInfo(cn_df,instrument_df,instrument_column):
     instrumentInfoSeries = instrument_df[instrument_column]
     bookIdIdx = cn_df.index.get_level_values('order_book_id')
-    bookIdArray = bookIdIdx.get_values()
+    #bookIdArray = bookIdIdx.get_values()
+    bookIdArray = bookIdIdx.values
     instrumentInfo = instrumentInfoSeries[bookIdArray[:]].values
     cn_df[instrument_column] = instrumentInfo
     return cn_df

@@ -8,7 +8,7 @@ def price_reader(price_path):
     price_df.date = pd.to_datetime(price_df.date,format="%Y-%m-%d",errors='ignore')
     # price_df.date = price_df.date.apply(timezone.localize)
     price_df.set_index(['date'],drop=True,inplace=True)
-    price_df = price_df.sortlevel(axis=1)
+    price_df = price_df.sort_index(axis=1)
     return price_df
 
 def instrument_reader(instrument_path):

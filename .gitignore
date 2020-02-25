@@ -1,6 +1,6 @@
 # Spesific files #
 ###################
-cn_*.csv
+*.csv
 *-checkpoint.ipynb
 
 # Spesific directors #
